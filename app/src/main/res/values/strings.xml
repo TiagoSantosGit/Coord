@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Coord</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="CalculadordeCoordenadas">Calculador de Coordenadas</string>
+    <string name="CalculadorCoordenadas">Calculador Coordenadas</string>
+    <string name="CalculaCoordenadas">Calcula Coordenadas</string>
+    <string name="CalcCoord">CalcCoord</string>
+</resources>

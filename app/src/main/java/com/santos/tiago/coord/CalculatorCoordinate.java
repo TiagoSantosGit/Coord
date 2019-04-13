@@ -105,14 +105,29 @@ public class CalculatorCoordinate extends AppCompatActivity {
         });
     }
 
+    /**
+     * calcula seno
+     * @param grau
+     * @return
+     */
     private double GetSen(double grau) {
         return Math.sin(grau * Math.PI / 180);
     }
 
+    /**
+     * calcula cosseno
+     * @param grau
+     * @return
+     */
     private double GetCos(double grau) {
         return Math.cos(grau * Math.PI / 180);
     }
 
+    /**
+     * calcula grau
+     * @param furos
+     * @return
+     */
     private double GetGrau(int furos) {
         return 360.0 / (double) furos;
     }
