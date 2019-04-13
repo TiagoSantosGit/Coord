@@ -32,7 +32,7 @@ public class CalculatorCoordinate extends AppCompatActivity {
     private double circunferencia = 0.0;
     private double raio = 0.0;
     private double anguloPartida = 0.0;
-    private List<String> list = new ArrayList<String>();
+    private List<String> list = null;
     private DecimalFormat dcf = new DecimalFormat("0.00");
 
     @Override
@@ -52,61 +52,77 @@ public class CalculatorCoordinate extends AppCompatActivity {
         btnCalcular.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!TextUtils.isEmpty(edtCirferencia.getText())) {
-                    if (!TextUtils.isEmpty(edtFuros.getText())) {
-                        if(!TextUtils.isEmpty(edtAnguloPartida.getText())) {
-                            furos = Integer.parseInt(edtFuros.getText().toString());
-                            circunferencia = Double.parseDouble(edtCirferencia.getText().toString());
-                            anguloPartida = Double.parseDouble(edtAnguloPartida.getText().toString());
-                            raio = circunferencia / 2;
-                            grau = GetGrau(furos);
-                            if(anguloPartida != 0){
-                                grauTotal = anguloPartida;
-                            }else{
-                                grauTotal = grau;
-                            }
-                            for (int i = 1; i <= furos; i++) {
-                                coordX = GetCos(grauTotal) * raio;
-                                coordY = GetSen(grauTotal) * raio;
-                                list.add(i + ": X" + dcf.format(coordX) + " Y" + dcf.format(coordY) + " Ângulo " +
-                                        dcf.format(grauTotal));
-                                grauTotal += grau;
-                                if(grauTotal > 360)
-                                    grauTotal -= 360;
-                            }
-                            ArrayAdapter<String> adp = new ArrayAdapter<String>(CalculatorCoordinate.this,
-                                    android.R.layout.simple_list_item_1, list);
-                            lstResultado.setAdapter(adp);
-                            ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
-                                    .hideSoftInputFromWindow(btnCalcular.getWindowToken(), 0);
-                        }else{
-                            edtAnguloPartida.setError("Coloque o ângulo do primeiro ponto!!!");
-                        }
-                    } else {
-                        edtFuros.setError("Coloque a quantidade de furos!!!");
-                    }
-                } else {
-                    edtCirferencia.setError("Coloque o diâmetro da circunferência!!!");
-                }
+                calcula();
             }
         });
 
         btnLimpar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                edtCirferencia.setText("");
-                edtFuros.setText("");
-                edtAnguloPartida.setText("0");
-                lstResultado.setAdapter(null);
-                list.clear();
-                edtCirferencia.requestFocus();
-                ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(edtCirferencia, 0);
+                limpaTela();
             }
         });
     }
 
     /**
+     * limpa todos os campos e listas
+     */
+    private void limpaTela() {
+        edtCirferencia.setText("");
+        edtFuros.setText("");
+        edtAnguloPartida.setText("0");
+        lstResultado.setAdapter(null);
+        list.clear();
+        edtCirferencia.requestFocus();
+        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(edtCirferencia, 0);
+    }
+
+    /**
+     * gera os resultados
+     */
+    private void calcula() {
+        if (!TextUtils.isEmpty(edtCirferencia.getText())) {
+            if (!TextUtils.isEmpty(edtFuros.getText())) {
+                if (!TextUtils.isEmpty(edtAnguloPartida.getText())) {
+                    furos = Integer.parseInt(edtFuros.getText().toString());
+                    circunferencia = Double.parseDouble(edtCirferencia.getText().toString());
+                    anguloPartida = Double.parseDouble(edtAnguloPartida.getText().toString());
+                    raio = circunferencia / 2;
+                    grau = GetGrau(furos);
+                    if (anguloPartida != 0) {
+                        grauTotal = anguloPartida;
+                    } else {
+                        grauTotal = grau;
+                    }
+                    list = new ArrayList<String>();
+                    for (int i = 1; i <= furos; i++) {
+                        coordX = GetCos(grauTotal) * raio;
+                        coordY = GetSen(grauTotal) * raio;
+                        list.add(i + ": X" + dcf.format(coordX) + " Y" + dcf.format(coordY) + " Ângulo " +
+                                dcf.format(grauTotal));
+                        grauTotal += grau;
+                        if (grauTotal > 360)
+                            grauTotal -= 360;
+                    }
+                    ArrayAdapter<String> adp = new ArrayAdapter<String>(CalculatorCoordinate.this,
+                            android.R.layout.simple_list_item_1, list);
+                    lstResultado.setAdapter(adp);
+                    ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
+                            .hideSoftInputFromWindow(btnCalcular.getWindowToken(), 0);
+                } else {
+                    edtAnguloPartida.setError("Coloque o ângulo do primeiro ponto!!!");
+                }
+            } else {
+                edtFuros.setError("Coloque a quantidade de furos!!!");
+            }
+        } else {
+            edtCirferencia.setError("Coloque o diâmetro da circunferência!!!");
+        }
+    }
+
+    /**
      * calcula seno
+     *
      * @param grau
      * @return
      */
@@ -116,6 +132,7 @@ public class CalculatorCoordinate extends AppCompatActivity {
 
     /**
      * calcula cosseno
+     *
      * @param grau
      * @return
      */
@@ -125,12 +142,11 @@ public class CalculatorCoordinate extends AppCompatActivity {
 
     /**
      * calcula grau
+     *
      * @param furos
      * @return
      */
     private double GetGrau(int furos) {
         return 360.0 / (double) furos;
     }
-
-
 }
